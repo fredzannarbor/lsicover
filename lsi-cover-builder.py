@@ -51,7 +51,7 @@ InvertedColor = "White"
 BaseFont = "Baskerville Bold"
 
 createCharStyle(name="Title 1", font=BaseFont,
-                fontsize=36, features='smallcaps', fillcolor=InvertedColor)
+                fontsize=48, features='smallcaps', fillcolor=InvertedColor)
 createParagraphStyle("Title1", linespacingmode=1,
                      alignment=1, charstyle="Title 1")
 
@@ -59,6 +59,11 @@ createCharStyle(name="Body Text", font=BaseFont,
                 fontsize=11, features='none', fillcolor=InvertedColor)
 createParagraphStyle("Body Text", linespacingmode=1,
                      alignment=3, charstyle="Body Text")
+createCharStyle(name="Picture Caption", font=BaseFont,
+                fontsize=11, features='none', fillcolor=InvertedColor)
+createParagraphStyle("Picture Caption", linespacingmode=1,
+                     alignment=2, charstyle="Picture Caption")
+
 
 #  gets values from the open scribus document
 #  which must be a cover template file downloaded from either LSI or KDP
@@ -169,7 +174,7 @@ createLayer("FrontText")
 # create Title box
 
 TitleBox = createText(leftfronttext, topLeftY +
-                      textsafety + 0.25, trimsizewidth - textsafety, 2)
+                      textsafety + 0.5, trimsizewidth - textsafety, 2)
 
 setTextColor(InvertedColor, TitleBox)
 setText(BookTitle, TitleBox)
@@ -178,27 +183,25 @@ applyStyle("Title1", TitleBox)
 # create Subtitle box
 
 SubTitleBox = createText(leftfronttext, topLeftY +
-                         textsafety + 2, trimsizewidth - textsafety, 2)
+                         textsafety + 2.25, trimsizewidth - textsafety, 2)
 setTextColor(InvertedColor, SubTitleBox)
 setText(SubTitle, SubTitleBox)
 applyStyle("Title1", SubTitleBox)
-setFontSize(24, SubTitleBox)
+setFontSize(36, SubTitleBox)
 
 
 # create Picture Caption box
 
 PicSig = createText(leftfronttext, topLeftY + textsafety +
-                    3, trimsizewidth - textsafety, 0.5)
+                    3.25, trimsizewidth - textsafety, 0.5)
 setText("Picture Caption Goes Here", PicSig)
-setTextColor(InvertedColor, TitleBox)
-setTextAlignment(ALIGN_RIGHT, PicSig)
-setFontSize(11, PicSig)
-setFillColor(DominantColor, PicSig)
+setTextColor(InvertedColor, PicSig)
+applyStyle("Picture Caption", PicSig)
 
 
 #  create byline box
 
-BylineBox = createText(leftfronttext, topLeftY + 5,
+BylineBox = createText(leftfronttext, textsafety + trimsizeheight - 3.5,
                        trimsizewidth - textsafety, 1)
 setTextColor(InvertedColor, BylineBox)
 setText(Byline, BylineBox)
@@ -237,7 +240,7 @@ createLayer("Spine")
 # create the text that will sit on the spine and rotate its box
 
 SpineTitle = BookTitle
-SpineTop = createText(topLeftX + textsafety + trimsizewidth + spine,
+SpineTop = createText(topLeftX + textsafety*2 + trimsizewidth + spine - .1,
                       topLeftY + textsafety + .25, trimsizeheight - textsafety, spine)
 setTextColor(InvertedColor, SpineTop)
 setText(SpineTitle, SpineTop)
