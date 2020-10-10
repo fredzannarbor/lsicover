@@ -1,6 +1,3 @@
-#/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 import scribus
 from scribus import *
 import math
@@ -8,10 +5,11 @@ import argparse
 import sys
 print(sys.version)
 
+# define helper functions
 
 def applyStyle(style, story):
 
-    '''Try apply style to selected text. If style doesn't exist, create it.'''
+    '''Try to apply style to selected text. If style doesn't exist, create it.'''
 
     try:
 
@@ -25,26 +23,17 @@ def applyStyle(style, story):
 
     return story
 
-distributor = "LSI"
 
+# initialize variables with default values
+distributor = "LSI"
+trimsizewidth = 8.5
+trimsizeheight = 11.0
+ImprintText = "Nimble Books LLC"
 
 if haveDoc():
     setUnit = UNIT_INCHES
 
-startMsg1 = "This module calculates spine width for LSI template then uses that info to place "
-startMsg2 = "horizontal and vertical guides on the page and calculate the correct width for "
-startMsg3 = "text and image boxes."
-
-startMsg = startMsg1 + startMsg2 + startMsg3
-
-PageWidth, PageHeight = getPageSize()
-PageWidth = float(PageWidth)
-
-start = scribus.messageBox(
-    'Spine Width Calculator & Guide Applier', startMsg, ICON_WARNING, BUTTON_OK)
-
-#sets colors (no need to import color palette any longer)
-
+# sets custom colors 
 defineColor("Nimble Maroon", 0, 255, 255, 141)
 defineColor("Nimble Napoleonic Green", 187, 0, 200, 187)
 defineColor("Nimble Blue", 255, 171, 0, 159)
@@ -52,42 +41,12 @@ defineColor("Nimble Feldgrau", 154, 102, 131, 110)
 defineColor("Nimble Metallic Gold", 113, 120, 200, 51)
 defineColor("Nimble Reference Red", 0, 255, 255, 0)
 
-
-
-createLayer("ISBN")
-
-#ungroups and deselects
-
-distributor = valueDialog('Distributor ', 'Enter KDP or LSI')
-
-if distributor == "LSI":
-    
-    if objectExists("Group10"):
-        unGroupObject("Group10")
-        sentToLayer("ISBN", "Group9")
-
-    else:
-        print('no group10')
-
-else:
-    pass # no action
-
-
-#ask for the top left xy
-
-topLeftX = 3.5
-topLeftY = 0.25
-
-# topLeftX = valueDialog('topLeftX', 'Enter X coord of top left corner')
-#topLeftX = float(topLeftX)
-
-#topLeftY = valueDialog('topLeftY', 'Enter Y coord of top left corner')
-#topLeftY = float(topLeftY)
-
-#find out the dominant color
-
-DominantColor = valueDialog('Dominant Color', 'Enter Name of Dominant Color')
+DominantColor = "Nimble Blue"
 InvertedColor = "White"
+
+
+
+#  sets fonts and styles
 
 BaseFont = "Baskerville Bold"
 
@@ -101,86 +60,113 @@ createCharStyle(name="Body Text", font=BaseFont,
 createParagraphStyle("Body Text", linespacingmode=1,
                      alignment=3, charstyle="Body Text")
 
+#  gets values from the open scribus document
+#  which must be a cover template file downloaded from either LSI or KDP
 
-#find out the base font
+PageWidth, PageHeight = getPageSize()
+PageWidth = float(PageWidth)
 
+startMsg1 = "This script 1) creates necessary layers 2) moves the bar code to its own top layer"
+startMsg2 = "3) creates text boxes with title info, etc. 4) creates image boxes"
+startMsg3 = "5) creates spine text & rotates it into position."
 
-# BaseFont = valueDialog('Base Font','Enter Exact Name of Font')
+startMsg = startMsg1 + startMsg2 + startMsg3
 
-print(BaseFont)
-
-
-#find out the book title
-
-BookTitle = valueDialog('BookTitle', 'Enter Book Title')
-
-#find out the book's subtitle
-
-SubTitle = valueDialog('SubTitle', 'Enter SubTitle')
-
-# find out the author's name
-
-Byline = valueDialog('Byline', 'Enter Byline with By')
+start = scribus.messageBox(
+    'Cover Builder', startMsg, ICON_WARNING, BUTTON_OK)
 
 
-# find out the text box size and convert to float
 
-trimsizewidth = valueDialog('trimsizewidth', 'Enter Trim Width')
+#  uncomment if you want user to input the text box size and convert to float
+
+""" trimsizewidth = valueDialog('trimsizewidth', 'Enter Trim Width')
 trimsizewidth = float(trimsizewidth)
 
 trimsizeheight = valueDialog('trimsizeheight', 'Enter Trim Height')
-trimsizeheight = float(trimsizeheight)
+trimsizeheight = float(trimsizeheight) """
 
-
-# find out the spine width
+#  input the spine width
 spine = scribus.valueDialog('Spine Width', 'Enter Spine Width in Inches')
 spine = float(spine)
 
-#find out the textsafety
-
 textsafety = 0.5
-# textsafety = scribus.valueDialog('Text Safety', 'Enter Text Safety in Inches')
-# textsafety = float(textsafety)
 
-# calculate the fill size
+#  uncomment if you want to input  the text safety
+
+#  textsafety = scribus.valueDialog('Text Safety', 'Enter Text Safety in Inches')
+#  textsafety = float(textsafety)
+# ungroups and deselects
+
+distributor = valueDialog('Distributor ', 'Enter KDP or LSI')
+
+# ask user for dominant color
+
+DominantColor = valueDialog('Dominant Color', 'Enter Name of Dominant Color')
+
+# uncomment if you want to ask user for the base font
+
+#  BaseFont = valueDialog('Base Font','Enter Exact Name of Font')
+
+# input the book title
+
+BookTitle = valueDialog('BookTitle', 'Enter Book Title')
+
+# input the book's subtitle
+
+SubTitle = valueDialog('SubTitle', 'Enter SubTitle')
+
+#  input the author's name
+
+Byline = valueDialog('Byline', 'Enter Byline with By')
+
+#  set up page
+
+if distributor == "LSI":
+
+    topLeftX = 22.75 - 2*trimsizewidth - spine - 2*0.63 - 0.7
+    topLeftY = 0.375
+
+else:  # KDP
+    topLeftX = 0
+    topLeftY = 0
+
+#  calculate the fill size
 
 fillwidth = trimsizewidth*2 + spine + 4*textsafety + 0.2
 fillheight = trimsizeheight + 4*textsafety
 
-
-#calculate x coordinates
-
+# calculate x coordinates
 
 leftfilledge = topLeftX
-leftfronttext = topLeftX + textsafety + trimsizewidth + spine + 0.25
+leftfronttext = topLeftX + textsafety + trimsizewidth + spine + 0.25 + 0.9
 
-# calculate y coordinates
+#  calculate y coordinates
 
 filltop = topLeftY
 textboxtop = topLeftY + 0.25
 spinetop = topLeftY + 0.25
 NimbleNtop = topLeftY + trimsizeheight - 0.25
 
-#
+
 createLayer("Fill")
-#
-#create fill box
+
+# create fill box
 
 createRect(topLeftX, topLeftY, fillwidth, fillheight, "FillBox")
 setFillColor(DominantColor, "FillBox")
 
 createLayer("FrontImage")
 
-#create image box that covers entire front cover
+# create image box that covers entire front cover
 
 createImage(leftfronttext, topLeftY, trimsizewidth + textsafety,
             trimsizeheight + textsafety, "FrontCoverImage")
-#
-# create front text layer
-#
+
+#  create front text layer
+
 createLayer("FrontText")
 
-#create Title box
+# create Title box
 
 TitleBox = createText(leftfronttext, topLeftY +
                       textsafety + 0.25, trimsizewidth - textsafety, 2)
@@ -189,7 +175,7 @@ setTextColor(InvertedColor, TitleBox)
 setText(BookTitle, TitleBox)
 applyStyle("Title1", TitleBox)
 
-#create Subtitle box
+# create Subtitle box
 
 SubTitleBox = createText(leftfronttext, topLeftY +
                          textsafety + 2, trimsizewidth - textsafety, 2)
@@ -199,7 +185,7 @@ applyStyle("Title1", SubTitleBox)
 setFontSize(24, SubTitleBox)
 
 
-#create Picture Caption box
+# create Picture Caption box
 
 PicSig = createText(leftfronttext, topLeftY + textsafety +
                     3, trimsizewidth - textsafety, 0.5)
@@ -210,7 +196,7 @@ setFontSize(11, PicSig)
 setFillColor(DominantColor, PicSig)
 
 
-# create byline box
+#  create byline box
 
 BylineBox = createText(leftfronttext, topLeftY + 5,
                        trimsizewidth - textsafety, 1)
@@ -220,24 +206,23 @@ applyStyle("Title1", BylineBox)
 setFontSize(22, BylineBox)
 
 
-# create Nimble Books logo
+#  put Imprint on front cover
 
-NimbleLogoType = createText(
+#  customize for your own values
+
+Imprint = createText(
     leftfronttext, textsafety + trimsizeheight - 2.5, trimsizewidth - textsafety, 1)
-setTextColor(InvertedColor, NimbleLogoType)
-setText("Nimble Books LLC", NimbleLogoType)
-applyStyle("Title1", NimbleLogoType)
-setFontSize(14, NimbleLogoType)
+setTextColor(InvertedColor, Imprint)
+setText(ImprintText, Imprint)
+applyStyle("Title1", Imprint)
+setFontSize(14, Imprint)
 
-# create Back text layer
+#  create Back text  & layers
 
 createLayer("BackText")
 
-
-#create Back text box
-
 BackTextBox = createText(topLeftX + textsafety, topLeftY + textsafety +
-                         0.25, trimsizewidth - textsafety, trimsizeheight - textsafety*2 - 0.5)
+                         0.5, trimsizewidth - textsafety - 1, trimsizeheight - textsafety*2 - 0.5)
 
 
 setTextColor(InvertedColor, BackTextBox)
@@ -245,12 +230,11 @@ setText("back text", BackTextBox)
 applyStyle("Body Text", BackTextBox)
 setFontSize(11, BackTextBox)
 
-#create Spine layer
+# create Spine layer & text
 
 createLayer("Spine")
 
-
-#create the text that will sit on the spine and rotate its box
+# create the text that will sit on the spine and rotate its box
 
 SpineTitle = BookTitle
 SpineTop = createText(topLeftX + textsafety + trimsizewidth + spine,
@@ -263,12 +247,26 @@ setFontSize(14, SpineTop)
 
 rotateObject(270, SpineTop)
 
-#create white rectangle that sits underneath standard LSI ISBN
+createLayer("ISBN")
+
+if distributor == "LSI":
+    setActiveLayer("Background")
+    deselectAll()
+    unGroupObject("Group9")
+    unGroupObject("Group8")
+
+    l = ['Polygon97', 'Polygon98', 'Polygon99']
+    print("[{0}]".format(', '.join(map(str, l))))
+
+    groupObjects(l)
+
+    sentToLayer("ISBN", "Group10")
+
+# create white rectangle that sits underneath standard LSI ISBN
+
+setActiveLayer("ISBN")
 
 createRect(topLeftX + textsafety*2, trimsizeheight -
            1.5, 2.2, 1.5, "UnderISBN")
 setFillColor("White", "UnderISBN")
 setLineColor(DominantColor, "UnderISBN")
-
-
-
