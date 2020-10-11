@@ -40,6 +40,8 @@ defineColor("Nimble Blue", 255, 171, 0, 159)
 defineColor("Nimble Feldgrau", 154, 102, 131, 110)
 defineColor("Nimble Metallic Gold", 113, 120, 200, 51)
 defineColor("Nimble Reference Red", 0, 255, 255, 0)
+defineColor("USAF Blue", 100, 66, 0, 44)
+# for more aviation blues see https://en.wikipedia.org/wiki/Air_Force_blue
 
 DominantColor = "Nimble Blue"
 InvertedColor = "White"
