@@ -239,15 +239,31 @@ setFontSize(11, BackTextBox)
 
 createLayer("Spine")
 
+# find the spine and select it
+
+if distributor == "LSI":
+    setActiveLayer("Background")
+    deselectAll()
+    unGroupObject("Group9")
+    selectObject("Polygon2")
+    coords = getPosition("Polygon2")
+
+
+
 # create the text that will sit on the spine and rotate its box
 
+setActiveLayer("Spine")
+
 SpineTitle = BookTitle
-SpineTop = createText(topLeftX + textsafety*2 + trimsizewidth + spine - .1,
-                      topLeftY + textsafety + .25, trimsizeheight - textsafety, spine)
+
+#SpineTop = createText(topLeftX + textsafety*2 + trimsizewidth + spine - .1, topLeftY + textsafety + .25, trimsizeheight - textsafety, spine)
+SpineTop=createText(coords[0], coords[1], trimsizeheight - textsafety, spine)
+
 setTextColor(InvertedColor, SpineTop)
 setText(SpineTitle, SpineTop)
 applyStyle("Title1", SpineTop)
 setTextAlignment(ALIGN_LEFT, SpineTop)
+setTextVerticalAlignment(ALIGNV_CENTEREED, SpineTop)
 setFontSize(14, SpineTop)
 
 rotateObject(270, SpineTop)
@@ -257,7 +273,6 @@ createLayer("ISBN")
 if distributor == "LSI":
     setActiveLayer("Background")
     deselectAll()
-    unGroupObject("Group9")
     unGroupObject("Group8")
 
     l = ['Polygon97', 'Polygon98', 'Polygon99']
