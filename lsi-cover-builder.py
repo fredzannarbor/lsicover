@@ -227,7 +227,7 @@ setFontSize(14, Imprint)
 
 createLayer("BackText")
 
-BackTextBox = createText(topLeftX + textsafety + .75, topLeftY + textsafety +
+BackTextBox = createText(topLeftX + textsafety + .85, topLeftY + textsafety +
                          0.5, trimsizewidth - textsafety - 1, trimsizeheight - textsafety*2 - 0.5)
 
 
@@ -258,7 +258,7 @@ setActiveLayer("Spine")
 SpineTitle = BookTitle
 
 #SpineTop = createText(topLeftX + textsafety*2 + trimsizewidth + spine - .1, topLeftY + textsafety + .25, trimsizeheight - textsafety, spine)
-SpineTop=createText(coords[0] + spine, coords[1]+ 0.5, trimsizeheight - textsafety, spine - .125)
+SpineTop=createText(coords[0] + .25, coords[1]+ 0.5, trimsizeheight - textsafety, spine - .125)
 
 setTextColor(InvertedColor, SpineTop)
 setText(SpineTitle, SpineTop)
@@ -279,25 +279,27 @@ setFont("Baskerville Italic", NimbleN)
 setFontSize(11, NimbleN)
 setTextAlignment(ALIGN_CENTERED, NimbleN)
 
+createLayer("UnderISBN")
 createLayer("ISBN")
 
 if distributor == "LSI":
     setActiveLayer("Background")
     deselectAll()
     unGroupObject("Group8")
+    coordsISBN = getPosition('Polygon97')
+    
+    setActiveLayer("UnderISBN")
+    createRect(coordsISBN[0] - .25, coordsISBN[1] - .25, 2.25, 1.5, "UnderISBN")
+    setFillColor("White", "UnderISBN")
+    setLineColor(DominantColor, "UnderISBN")
+
+    setActiveLayer("Background")
 
     l = ['Polygon97', 'Polygon98', 'Polygon99']
     print("[{0}]".format(', '.join(map(str, l))))
 
     groupObjects(l)
-
     sentToLayer("ISBN", "Group10")
 
 # create white rectangle that sits underneath standard LSI ISBN
 
-setActiveLayer("ISBN")
-
-createRect(coords[0] - .25, coords[1] -
-           .25, 2.25, 1.5, "UnderISBN")
-setFillColor("White", "UnderISBN")
-setLineColor(DominantColor, "UnderISBN")
