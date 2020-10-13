@@ -61,6 +61,7 @@ createCharStyle(name="Body Text", font=BaseFont,
                 fontsize=11, features='none', fillcolor=InvertedColor)
 createParagraphStyle("Body Text", linespacingmode=1,
                      alignment=3, charstyle="Body Text")
+
 createCharStyle(name="Picture Caption", font=BaseFont,
                 fontsize=11, features='none', fillcolor=InvertedColor)
 createParagraphStyle("Picture Caption", linespacingmode=1,
@@ -226,7 +227,7 @@ setFontSize(14, Imprint)
 
 createLayer("BackText")
 
-BackTextBox = createText(topLeftX + textsafety, topLeftY + textsafety +
+BackTextBox = createText(topLeftX + textsafety + .75, topLeftY + textsafety +
                          0.5, trimsizewidth - textsafety - 1, trimsizeheight - textsafety*2 - 0.5)
 
 
@@ -257,16 +258,26 @@ setActiveLayer("Spine")
 SpineTitle = BookTitle
 
 #SpineTop = createText(topLeftX + textsafety*2 + trimsizewidth + spine - .1, topLeftY + textsafety + .25, trimsizeheight - textsafety, spine)
-SpineTop=createText(coords[0], coords[1], trimsizeheight - textsafety, spine)
+SpineTop=createText(coords[0] + spine, coords[1]+ 0.5, trimsizeheight - textsafety, spine - .125)
 
 setTextColor(InvertedColor, SpineTop)
 setText(SpineTitle, SpineTop)
 applyStyle("Title1", SpineTop)
 setTextAlignment(ALIGN_LEFT, SpineTop)
-setTextVerticalAlignment(ALIGNV_CENTEREED, SpineTop)
+setTextVerticalAlignment(ALIGNV_CENTERED, SpineTop)
 setFontSize(14, SpineTop)
 
 rotateObject(270, SpineTop)
+
+# add Nimble N
+# typographic spine logo
+
+NimbleN = createText(coords[0], coords[1] + 10.125, 0.25, spine - .125)
+setText("N", NimbleN)
+setTextColor(InvertedColor, NimbleN)
+setFont("Baskerville Italic", NimbleN)
+setFontSize(11, NimbleN)
+setTextAlignment(ALIGN_CENTERED, NimbleN)
 
 createLayer("ISBN")
 
@@ -286,7 +297,7 @@ if distributor == "LSI":
 
 setActiveLayer("ISBN")
 
-createRect(topLeftX + textsafety*2, trimsizeheight -
-           1.5, 2.2, 1.5, "UnderISBN")
+createRect(coords[0] - .25, coords[1] -
+           .25, 2.25, 1.5, "UnderISBN")
 setFillColor("White", "UnderISBN")
 setLineColor(DominantColor, "UnderISBN")
