@@ -160,15 +160,15 @@ createLayer("Fill")
 
 # create fill box
 
-createRect(topLeftX, topLeftY, fillwidth, fillheight, "FillBox")
+createRect(topLeftX, topLeftY, fillwidth, fillheight - 0.5, "FillBox")
 setFillColor(DominantColor, "FillBox")
 
 createLayer("FrontImage")
 
 # create image box that covers entire front cover
 
-createImage(leftfronttext, topLeftY, trimsizewidth + textsafety,
-            trimsizeheight + textsafety, "FrontCoverImage")
+createImage(leftfronttext, topLeftY + 0.5, trimsizewidth,
+            trimsizeheight, "FrontCoverImage")
 
 #  create front text layer
 
@@ -227,8 +227,7 @@ setFontSize(14, Imprint)
 
 createLayer("BackText")
 
-BackTextBox = createText(topLeftX + textsafety + .85, topLeftY + textsafety +
-                         0.5, trimsizewidth - textsafety - 1, trimsizeheight - textsafety*2 - 0.5)
+BackTextBox = createText(topLeftX + textsafety + .85, topLeftY + textsafety +  0.5, trimsizewidth - textsafety - 1, trimsizeheight - textsafety*2 - 0.5)
 
 
 setTextColor(InvertedColor, BackTextBox)
