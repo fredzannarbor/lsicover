@@ -41,6 +41,7 @@ defineColor("Nimble Feldgrau", 154, 102, 131, 110)
 defineColor("Nimble Metallic Gold", 113, 120, 200, 51)
 defineColor("Nimble Reference Red", 0, 255, 255, 0)
 defineColor("USAF Blue", 100, 66, 0, 44)
+defineColor("DOE Green", 50, 0, 50, 60)
 # for more aviation blues see https://en.wikipedia.org/wiki/Air_Force_blue
 
 DominantColor = "Nimble Blue"
@@ -167,7 +168,7 @@ createLayer("FrontImage")
 
 # create image box that covers entire front cover
 
-createImage(leftfronttext, topLeftY + 0.5, trimsizewidth,
+createImage(leftfronttext, topLeftY + 0.25, trimsizewidth,
             trimsizeheight, "FrontCoverImage")
 
 #  create front text layer
@@ -257,7 +258,7 @@ setActiveLayer("Spine")
 SpineTitle = BookTitle
 
 #SpineTop = createText(topLeftX + textsafety*2 + trimsizewidth + spine - .1, topLeftY + textsafety + .25, trimsizeheight - textsafety, spine)
-SpineTop=createText(coords[0] + .25, coords[1]+ 0.5, trimsizeheight - textsafety, spine - .125)
+SpineTop=createText(coords[0], coords[1]+ 0.5, trimsizeheight - textsafety, spine - .125)
 
 setTextColor(InvertedColor, SpineTop)
 setText(SpineTitle, SpineTop)
