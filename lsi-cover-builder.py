@@ -258,14 +258,14 @@ setActiveLayer("Spine")
 SpineTitle = BookTitle
 
 #SpineTop = createText(topLeftX + textsafety*2 + trimsizewidth + spine - .1, topLeftY + textsafety + .25, trimsizeheight - textsafety, spine)
-SpineTop=createText(coords[0] + 0.2, coords[1]+ 0.5, trimsizeheight - textsafety, spine - .08)
+SpineTop=createText(coords[0] - 0.2, coords[1]+ 0.5, trimsizeheight - textsafety, spine - .1)
 
 setTextColor(InvertedColor, SpineTop)
 setText(SpineTitle, SpineTop)
 applyStyle("Title1", SpineTop)
 setTextAlignment(ALIGN_LEFT, SpineTop)
 setTextVerticalAlignment(ALIGNV_CENTERED, SpineTop)
-setFontSize(14, SpineTop)
+setFontSize(12, SpineTop)
 
 rotateObject(270, SpineTop)
 
