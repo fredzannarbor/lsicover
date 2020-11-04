@@ -51,10 +51,10 @@ InvertedColor = "White"
 
 #  sets fonts and styles
 
-BaseFont = "Baskerville Bold"
+BaseFont = "Baskerville Regular"
 
 createCharStyle(name="Title 1", font=BaseFont,
-                fontsize=48, features='smallcaps', fillcolor=InvertedColor)
+                fontsize=48, features='smallcaps,bold', fillcolor=InvertedColor)
 createParagraphStyle("Title1", linespacingmode=1,
                      alignment=1, charstyle="Title 1")
 
@@ -258,7 +258,7 @@ setActiveLayer("Spine")
 SpineTitle = BookTitle
 
 #SpineTop = createText(topLeftX + textsafety*2 + trimsizewidth + spine - .1, topLeftY + textsafety + .25, trimsizeheight - textsafety, spine)
-SpineTop=createText(coords[0], coords[1]+ 0.5, trimsizeheight - textsafety, spine - .125)
+SpineTop=createText(coords[0] + 0.2, coords[1]+ 0.5, trimsizeheight - textsafety, spine - .08)
 
 setTextColor(InvertedColor, SpineTop)
 setText(SpineTitle, SpineTop)
@@ -272,7 +272,7 @@ rotateObject(270, SpineTop)
 # add Nimble N
 # typographic spine logo
 
-NimbleN = createText(coords[0], coords[1] + 10.125, 0.25, spine - .125)
+NimbleN = createText(coords[0], coords[1] + 10.125, 0.25, spine - .02)
 setText("N", NimbleN)
 setTextColor(InvertedColor, NimbleN)
 setFont("Baskerville Italic", NimbleN)
