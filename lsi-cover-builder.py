@@ -47,16 +47,24 @@ defineColor("DOE Green", 50, 0, 50, 60)
 DominantColor = "Nimble Blue"
 InvertedColor = "White"
 
-
-
 #  sets fonts and styles
 
 BaseFont = "Baskerville Regular"
 
-createCharStyle(name="Title 1", font=BaseFont,
-                fontsize=48, features='smallcaps,bold', fillcolor=InvertedColor)
+createCharStyle(name="Title 1", font="Baskerville Bold",
+                fontsize=48, features='smallcaps', fillcolor=InvertedColor)
 createParagraphStyle("Title1", linespacingmode=1,
                      alignment=1, charstyle="Title 1")
+
+createCharStyle(name="Subtitle", font="Baskerville Bold",
+                fontsize=36, features='smallcaps', fillcolor=InvertedColor)
+createParagraphStyle("Subtitle", linespacingmode=1,
+                     alignment=1, charstyle="Subtitle")
+
+createCharStyle(name="Byline", font="Baskerville Bold",
+                fontsize=22, features='smallcaps', fillcolor=InvertedColor)
+createParagraphStyle("Byline", linespacingmode=1,
+                     alignment=1, charstyle="Byline")
 
 createCharStyle(name="Body Text", font=BaseFont,
                 fontsize=11, features='none', fillcolor=InvertedColor)
@@ -190,9 +198,7 @@ SubTitleBox = createText(leftfronttext, topLeftY +
                          textsafety + 2.25, trimsizewidth - textsafety, 2)
 setTextColor(InvertedColor, SubTitleBox)
 setText(SubTitle, SubTitleBox)
-applyStyle("Title1", SubTitleBox)
-setFontSize(36, SubTitleBox)
-
+applyStyle("Subtitle, SubTitleBox)
 
 # create Picture Caption box
 
@@ -209,9 +215,7 @@ BylineBox = createText(leftfronttext, textsafety + trimsizeheight - 3.5,
                        trimsizewidth - textsafety, 1)
 setTextColor(InvertedColor, BylineBox)
 setText(Byline, BylineBox)
-applyStyle("Title1", BylineBox)
-setFontSize(22, BylineBox)
-
+applyStyle("Byline", BylineBox)
 
 #  put Imprint on front cover
 
@@ -248,7 +252,6 @@ if distributor == "LSI":
     unGroupObject("Group9")
     selectObject("Polygon2")
     coords = getPosition("Polygon2")
-
 
 
 # create the text that will sit on the spine and rotate its box
